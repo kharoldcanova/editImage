@@ -1,23 +1,27 @@
-#Importacion de la libreria pillow
-from PIL import Image, ImageFilter
+import tkinter as tk
+from PIL import ImageTk, Image
+#importaciones
+import functions.image as image
+import components.buttons as btn
+import functions.filters as flt
 
-DirectorioImagen = r'./índice.jpeg'
+#main window
+root = tk.Tk()
+root.geometry("300x100")
+root.title("Filtros de imagen")
 
-#Convirtiendo la imagen a blanco y negro
-img = Image.open(DirectorioImagen).convert('LA')
-img.show()
+def convert(filepath):
+    image_filter = Image.open(filepath).convert('LA')
+    image_filter = ImageTk.PhotoImage(image_filter)
+    image.constraint_label(root, image_filter)
 
-#Aplica a la imagen un filtro borroso.
-img = Image.open(DirectorioImagen).filter(ImageFilter.BoxBlur(30))
-img.show()
+def main():
+    filepath = image.select_image()
+    photo = image.photo_image(filepath)
+    image.constraint_label(root, photo)
+    btn.make_button(root, convert(filepath))
 
-#Aplica a la imagen un filtro negativo.
-img = Image.open(DirectorioImagen).filter(ImageFilter.FIND_EDGES)
-img.show()
-
-#Aplica a la imagen un filtro e dibujo.
-img = Image.open(DirectorioImagen).filter(ImageFilter.CONTOUR)
-img.show()
+btn.button_select(root, main)
 
 
-
+root.mainloop()
